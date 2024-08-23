@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const amountRange = document.getElementById('amountRange');
+            const rangeValue = document.getElementById('rangeValue');
+            const conversionResult = document.getElementById('conversionResult');
+            const currencyFrom = document.getElementById('currencyFrom');
+            const currencyTo = document.getElementById('currencyTo');
+            const changeButton = document.getElementById('changeButton');
+
+            const exchangeRates = {
+                RUB: 0.013,
+                UZS: 0.000085,
+                USD: 1,
+                KZT: 0.0021
+            };
+
+            amountRange.addEventListener('input', function () {
+                rangeValue.textContent = amountRange.value;
+                convertCurrency();
+            });
+
+            changeButton.addEventListener('click', function () {
+                const fromValue = currencyFrom.value;
+                currencyFrom.value = currencyTo.value;
+                currencyTo.value = fromValue;
+                convertCurrency();
+            });
+
+            function convertCurrency() {
+                const fromCurrency = currencyFrom.value;
+                const toCurrency = currencyTo.value;
+                const amount = amountRange.value;
+
+                if (fromCurrency && toCurrency && amount) {
+                    const result = (amount * exchangeRates[fromCurrency]) / exchangeRates[toCurrency];
+                    conversionResult.textContent = `Narx: ${result.toFixed(2)} ${toCurrency}`;
+                } else {
+                    conversionResult.textContent = '';
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div class="flex justify-center items-center h-[100vh] bg-violet-700">
+        <div class="flex items-center w-[50%] bg-violet-400 p-10 rounded-xl flex-col gap-5">
+            <div class="flex w-full items-center gap-5">
+                <div class="card bg-base-300 rounded-box grid h-32 flex-grow place-items-center p-[20px]">
+                    <select class="select select-primary w-full max-w-xs" id="currencyFrom">
+                        <option disabled selected>Valyutani Tanlang</option>
+                        <option value="RUB">Rubil</option>
+                        <option value="UZS">So'm</option>
+                        <option value="USD">Qogoz</option>
+                        <option value="KZT">Tanga</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-active btn-primary" id="changeButton">Change</button>
+                <div class="card bg-base-300 rounded-box grid h-32 flex-grow place-items-center p-[20px]">
+                    <select class="select select-primary w-full max-w-xs" id="currencyTo">
+                        <option disabled selected>Valyutani Tanlang</option>
+                        <option value="RUB">Rubil</option>
+                        <option value="UZS">So'm</option>
+                        <option value="USD">Qogoz</option>
+                        <option value="KZT">Tanga</option>
+                    </select>
+                </div>
+            </div>
+            <div class="w-full">
+                <input type="range" min="0" max="1000" value="500" class="w-full" id="amountRange">
+                <p class="text-[30px] mt-2" id="rangeValue">500</p>
+                <p class="text-[30px] mt-2" id="conversionResult"></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
